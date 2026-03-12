@@ -1,0 +1,19 @@
+#shedule-item {
+  display: flex;
+  gap: 5px;
+}
+
+#shedule-item {
+  li {
+    width: fit-content;
+    height: fit-content;
+    border: 2px solid;
+    padding: 3px;
+    border-color: black;
+  }
+
+  input {
+    border: 0;
+    outline: 0;
+  }
+}
