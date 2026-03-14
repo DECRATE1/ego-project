@@ -1,22 +1,52 @@
 // eslint-disable-next-line import/no-unresolved
 import { IData } from "src/app";
-import SheduleItem from "./SheduleItem";
+import { useEffect, useState } from "react";
+import SheduleElement from "./SheduleElement";
 
-export default function Main({ data, date }: { data: IData; date: string }) {
+async function initJSON(date: string) {
+  return window.shedule.init(date);
+}
+
+export default function Main({ date }: { date: string }) {
+  const [shedule, setShedule] = useState<null | IData>(null);
+
+  useEffect(() => {
+    const init = async () => {
+      const json = await initJSON(date);
+      return json;
+    };
+    init().then((json) => setShedule(json[date]));
+  }, [date]);
+
+  const handleShedule = (value: IData) => {
+    setShedule(value);
+  };
+
   return (
     <main>
-      {Object.keys(data).map((time, index) => {
-        return (
-          <SheduleItem
-            key={`sheduleItem-${index}`}
-            time={time}
-            xe={+data[time].xe}
-            sug={+data[time].sug}
-            ins={+data[time].ins}
-            date={date}
-          ></SheduleItem>
-        );
-      })}
+      {shedule &&
+        Object.keys(shedule).map((time, index) => {
+          return (
+            <SheduleElement
+              key={`sheduleItem-${time + index}`}
+              time={time}
+              xe={+shedule[time].xe}
+              sug={+shedule[time].sug}
+              ins={+shedule[time].ins}
+              date={date}
+            ></SheduleElement>
+          );
+        })}
+
+      <button
+        style={{ translate: "200px" }}
+        onClick={async () => {
+          const newShedule = await window.shedule.add(date);
+          setShedule(newShedule[date]);
+        }}
+      >
+        +
+      </button>
     </main>
   );
 }

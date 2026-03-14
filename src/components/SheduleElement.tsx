@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+// eslint-disable-next-line import/no-unresolved
 
 export interface ISheduleItem {
   ins: number;
@@ -11,7 +12,7 @@ interface Props extends ISheduleItem {
   date: string;
 }
 
-export default function SheduleItem({ ins, sug, xe, time, date }: Props) {
+export default function SheduleElement({ ins, sug, xe, time, date }: Props) {
   const [value, setValue] = useState({ ins, sug, xe, time });
   const currTimeout = useRef(null);
   const onChange = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
@@ -24,20 +25,43 @@ export default function SheduleItem({ ins, sug, xe, time, date }: Props) {
     if (JSON.stringify(value) === JSON.stringify({ ins, sug, xe, time }))
       return;
     currTimeout.current = setTimeout(() => {
-      window.shedule.save(value, date);
-    }, 5000);
+      window.shedule.update(value, date);
+    }, 800);
     return () => clearTimeout(currTimeout.current);
   }, [value]);
 
   return (
     <ul id="shedule-item">
       <li>
-        ИНС: {<input defaultValue={ins} name="ins" onChange={onChange} />}{" "}
+        ИНС:{" "}
+        {
+          <input
+            value={`${value.ins}`}
+            name="ins"
+            onChange={(e) => onChange(e)}
+          />
+        }{" "}
       </li>
       <li>
-        САХ: {<input defaultValue={sug} name="sug" onChange={onChange} />}
+        САХ:{" "}
+        {
+          <input
+            value={`${value.sug}`}
+            name="sug"
+            onChange={(e) => onChange(e)}
+          />
+        }
       </li>
-      <li>XА: {<input defaultValue={xe} name="xe" onChange={onChange} />}</li>
+      <li>
+        XА:{" "}
+        {
+          <input
+            value={`${value.xe}`}
+            name="xe"
+            onChange={(e) => onChange(e)}
+          />
+        }
+      </li>
       <li>Время: {time}</li>
     </ul>
   );

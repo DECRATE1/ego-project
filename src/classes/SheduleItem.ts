@@ -1,13 +1,17 @@
+export interface ISheduleItem {
+  [key: string]: { ins: number; sug: number; xe: number };
+}
+
 export class SheduleItem {
-  private sug = 0;
-  private xe = 0;
-  private ins = 0;
-  private time: string;
-  instance: null | Record<string, Record<string, number>> = null;
+  private sug;
+  private xe;
+  private ins;
+  time: string;
+  instance: null | ISheduleItem = null;
   constructor({
-    sug,
-    xe,
-    ins,
+    sug = 0,
+    xe = 0,
+    ins = 0,
     time,
   }: {
     sug?: number;
@@ -21,7 +25,7 @@ export class SheduleItem {
     if (time) this.time = time;
     else {
       const createdAt = new Date();
-      this.time = `${createdAt.getHours()}:${createdAt.getMinutes()}:${createdAt.getSeconds()}`;
+      this.time = `${createdAt.getHours().toString().padStart(2, "0")}:${createdAt.getMinutes().toString().padStart(2, "0")}:${createdAt.getSeconds().toString().padStart(2, "0")}`;
     }
 
     this.Instantiate();

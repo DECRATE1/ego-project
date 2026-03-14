@@ -1,10 +1,13 @@
 @import url("./styles/shedule-item.css");
 @import url("./styles/main.css");
+@import url("./styles/select-date-bar.css");
 body {
+  margin: 0;
+  padding: 0;
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
     sans-serif;
-  margin: 0;
+  background: red;
 }
 
 ul {

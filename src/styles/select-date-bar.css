@@ -1,0 +1,7 @@
+#select-date-bar {
+  display: flex;
+  width: 100%;
+  background-color: black;
+  margin-top: auto;
+  justify-content: space-between;
+}

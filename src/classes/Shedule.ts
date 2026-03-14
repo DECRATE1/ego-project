@@ -1,8 +1,7 @@
 import fs from "fs";
 import fsa from "node:fs/promises";
 import { SheduleItem } from "./SheduleItem";
-// eslint-disable-next-line import/no-unresolved
-import { ISheduleItem } from "src/components/SheduleItem";
+import { ISheduleItem } from "src/components/SheduleElement";
 
 export class Shedule {
   /**
@@ -17,10 +16,13 @@ export class Shedule {
    * Проверяет наличие нынешней даты в shedule.json
    * @returns bool
    */
-  static async currDateIsExist(): Promise<boolean> {
-    const currDate = new Date().toLocaleDateString();
-    const shedule = JSON.parse(await fsa.readFile("./shedule.json", "utf-8"));
-    return shedule[currDate] != null;
+  static async dateIsExist(date: string): Promise<boolean> {
+    const shedule = await fsa.readFile("./shedule.json", "utf-8");
+    if (!shedule) {
+      await fsa.writeFile("./shedule.json", "{}");
+      return false;
+    }
+    return JSON.parse(shedule)[date] != null;
   }
 
   /**
@@ -41,15 +43,14 @@ export class Shedule {
   }
 
   /**
-   * Создает новое расписание на основе сегоднешней даты
+   * Создает новое расписание на основе даты
    * и записывет в shedule.json
    */
 
-  static async writeShedule() {
+  static async writeShedule(date: string) {
     const shedule = JSON.parse(await fsa.readFile("./shedule.json", "utf-8"));
-    const currDate = new Date().toLocaleDateString();
-    const sheduleItem = new SheduleItem().instance;
-    shedule[currDate] = sheduleItem;
+    const sheduleItem = new SheduleItem();
+    shedule[date] = { [sheduleItem.getKey()]: sheduleItem.getValue() };
     await fsa.writeFile("./shedule.json", JSON.stringify(shedule));
   }
 
@@ -57,24 +58,12 @@ export class Shedule {
    * Добавляет новый sheduleItem в shedule.json по дате
    * @param date string - дата в формате дд/мм/гг
    */
-  static addToShedule(date: string) {
-    fs.readFile("./shedule.json", "utf-8", (err, data) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      const shedule = JSON.parse(data);
-      const sheduleItem = new SheduleItem();
-      shedule[date][sheduleItem.getKey()] = sheduleItem.getValue();
-      fs.writeFile("./shedule.json", JSON.stringify(shedule), (err) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-
-        console.log("SheduleItem succesfully added");
-      });
-    });
+  static async addToShedule(date: string) {
+    const shedule = JSON.parse(await fsa.readFile("./shedule.json", "utf-8"));
+    const sheduleItem = new SheduleItem();
+    shedule[date][sheduleItem.getKey()] = sheduleItem.getValue();
+    await fsa.writeFile("./shedule.json", JSON.stringify(shedule));
+    return shedule;
   }
 
   /**

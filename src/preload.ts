@@ -1,15 +1,19 @@
 // See the Electron documentation for details on how to use preload scripts:
 
 import { contextBridge, ipcRenderer } from "electron";
-import { ISheduleItem } from "./components/SheduleItem";
+import { ISheduleItem } from "./components/SheduleElement";
 
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 contextBridge.exposeInMainWorld("shedule", {
-  init: () => {
-    return ipcRenderer.invoke("init");
+  init: (date: string) => {
+    return ipcRenderer.invoke("init", date);
   },
 
-  save: (value: ISheduleItem, date: string) => {
-    return ipcRenderer.invoke("save", value, date);
+  update: (value: ISheduleItem, date: string) => {
+    ipcRenderer.invoke("update", value, date);
+  },
+
+  add: (date: string) => {
+    return ipcRenderer.invoke("add", date);
   },
 });
