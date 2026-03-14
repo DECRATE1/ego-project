@@ -2,6 +2,7 @@
 import { IData } from "src/app";
 import { useEffect, useState } from "react";
 import SheduleElement from "./SheduleElement";
+import IncreaseBtn from "./IncreaseBtn";
 
 async function initJSON(date: string) {
   return window.shedule.init(date);
@@ -38,15 +39,7 @@ export default function Main({ date }: { date: string }) {
           );
         })}
 
-      <button
-        style={{ translate: "200px" }}
-        onClick={async () => {
-          const newShedule = await window.shedule.add(date);
-          setShedule(newShedule[date]);
-        }}
-      >
-        +
-      </button>
+      <IncreaseBtn date={date} handleShedule={handleShedule}></IncreaseBtn>
     </main>
   );
 }

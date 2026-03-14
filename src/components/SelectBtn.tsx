@@ -7,6 +7,7 @@ type SelectBtnType = {
 export default function SelectBtn({ date, type, handleDate }: SelectBtnType) {
   return (
     <button
+      id={type == "next" ? "right" : "left"}
       onClick={() => {
         const [day, month, year] = date.split("/");
         const newDate = new Date(
@@ -18,8 +19,6 @@ export default function SelectBtn({ date, type, handleDate }: SelectBtnType) {
 
         handleDate(newDate);
       }}
-    >
-      {type == "next" ? "->" : "<-"}
-    </button>
+    ></button>
   );
 }

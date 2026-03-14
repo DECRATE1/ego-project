@@ -37,18 +37,32 @@ export class SheduleItem {
     };
   }
 
+  /**
+   * Конвертирует instance в json
+   */
   public toJson() {
     return JSON.stringify(this.instance);
   }
+
+  /**
+   * Конвертирует instance в string
+   */
 
   public toString() {
     return this.instance.toString();
   }
 
+  /**
+   * Возращает value из instance
+   */
+
   public getValue() {
     return this.instance[this.time];
   }
 
+  /**
+   * Возращает ключи из instance
+   */
   public getKey() {
     return this.time;
   }

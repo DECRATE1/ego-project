@@ -1,3 +1,3 @@
 export default function Header({ currDate }: { currDate: string }) {
-  return <header>{currDate}</header>;
+  return <header id="header">{currDate}</header>;
 }
